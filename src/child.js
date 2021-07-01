@@ -3,7 +3,7 @@ import { TransactionContext } from './context';
 
 function Child() {
 
-    const { transactions, addTransaction } = useContext(TransactionContext);
+    const { transactions, addTransaction, deleteTransaction } = useContext(TransactionContext);
 
     // let [transactions, setTransaction] = useState(transactions);
     let [newDesc, setNewDesc] = useState('');
@@ -12,6 +12,9 @@ function Child() {
     const handleSubmit = (event) => {
         event.preventDefault();
         addTransaction({ amount: Number(newAmount), desc: newDesc })
+        event.target.reset()
+        setNewAmount(0)
+        setNewDesc('')
     }
 
     const getIncome = () => {
@@ -29,13 +32,13 @@ function Child() {
             if (transactions[i].amount < 0)
                 expense += transactions[i].amount
         }
-        return expense;
+        return -expense;
     }
 
     return (
         <div className="container">
             <h1 className="text-center">Expense Tracker</h1>
-            <h3>Your balance <br /> {getIncome() + getExpense()} </h3>
+            <h3>Your balance <br /> {getIncome() - getExpense()} </h3>
 
             <div className="total-expense-container">
                 <h3>Income <br /> {getIncome()} </h3>
@@ -49,6 +52,8 @@ function Child() {
                 {transactions.map((transaction, ind) => {
                     return (
                         <li key={ind}>
+                            <span><button onClick={() => deleteTransaction(transaction.id)} className="delete-btn">x</button><span>
+
                             <span> {transaction.desc} </span>
                             <span> {transaction.amount} </span>
                         </li>
