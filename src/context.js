@@ -14,16 +14,24 @@ export const ContextProvider = ({ children }) => {
 
     function addTransaction(transaction) {
         dispatch({
+            id: Math.floor(Math.random() * 10000),
             type: 'ADD_TRANSACTION',
             payload: transaction
         })
     }
-
+    function deleteTransaction(id) {
+        dispatch({
+          type: 'DELETE_TRANSACTION',
+          payload: id
+        });
+        //console.log(id)
+      }
     return (
         <TransactionContext.Provider value={
             {
                 transactions: state,
-                addTransaction
+                addTransaction,
+                deleteTransaction
             }
         }>
             {children}
